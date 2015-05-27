@@ -1,10 +1,27 @@
 #encoding=utf-8
 import jieba
+import json
+import config
+import requests
+import sys
 
-jieba.set_dictionary('/usr/local/lib/python2.7/site-packages/jieba/dict.txt')
-sentence = "獨立音樂需要大家一起來推廣，歡迎加入我們的行列！"
-print "Input：", sentence
-words = jieba.cut(sentence, cut_all=False)
-print "Output 精確模式 Full Mode："
+token = config.token
+tag = "明天"
+jsond = []
+text = []
+
+url = "https://api.instagram.com/v1/tags/"+tag+"/media/recent?access_token="+token+"&count=1"
+req = requests.get(url)
+text = json.loads(req.text)["data"][0]["caption"]["text"]
+print text
+	
+words = jieba.cut(text, cut_all=False)
+
 for word in words:
-    print word
+	chinese = True
+	for ch in word:
+		if ord(ch) < 0x4e00 or ord(ch) > 0x9fff:
+			chinese = False
+	if chinese:
+		print word
+        
