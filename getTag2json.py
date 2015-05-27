@@ -9,5 +9,4 @@ headers = head.headers
 response = requests.request("GET", url, headers=headers, params=querystring)
 j = json.loads(response.text)
 
-# print(response.text)
 json.dump(j, open("test.json", "w"), indent=2)
